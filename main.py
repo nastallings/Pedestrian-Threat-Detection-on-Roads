@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
 import Pedestrian_Detector as pd
 import Feature_Extractor as fe
+import Road_Detector as rd
 import cv2
 
 # load example image
-exampleImage = cv2.imread('Data/video1/frame1020.jpg')
-
+exampleImage = cv2.imread('Data/video1/frame987.jpg')
+rd.detect_road(exampleImage, True)
 max_width = 800
 if exampleImage.shape[1] > max_width:
     newWidth = max_width

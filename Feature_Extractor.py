@@ -15,8 +15,9 @@ def extract_features(image, showImage):
     kp1, temp = sift.detectAndCompute(image, None)
 
     if showImage:
-        image = cv2.drawKeypoints(image, kp1, image)
-        plt.imshow(image)
+        imageCopy = image.copy()
+        imageCopy = cv2.drawKeypoints(imageCopy, kp1, imageCopy)
+        plt.imshow(imageCopy)
         plt.show()
 
     return kp1

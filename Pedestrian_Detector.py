@@ -19,15 +19,15 @@ def detect_pedestrians(image, drawRectangles):
     (rectangles, weights) = hog.detectMultiScale(image, winStride=(4, 4), padding=(32, 32), scale=5)
 
     # Combine overlapping rectangles
-    final_rectangles = non_max_suppression(np.array([[x, y, x + w, y + h] for (x, y, w, h) in rectangles]),
+    finalRectangles = non_max_suppression(np.array([[x, y, x + w, y + h] for (x, y, w, h) in rectangles]),
                                            overlapThresh=0.65)
 
     # Check to see if rectangles should be printed
     if drawRectangles:
         if len(rectangles):
-            draw_rectangles(image, final_rectangles)
+            draw_rectangles(image, finalRectangles)
 
-    return final_rectangles
+    return finalRectangles
 
 
 def draw_rectangles(image, rectangles):
@@ -38,10 +38,10 @@ def draw_rectangles(image, rectangles):
     @:param rectangles : a list of rectangles to draw on the image.
     @:return nothing but displays the image
     """
-
+    imageCopy = image.copy()
     for (x0, y0, x1, y1) in rectangles:
-        cv2.rectangle(image, (x0, y0), (x1, y1), (0, 0, 0), 2)
+        cv2.rectangle(imageCopy, (x0, y0), (x1, y1), (0, 0, 0), 2)
 
-    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    plt.imshow(cv2.cvtColor(imageCopy, cv2.COLOR_BGR2RGB))
     plt.show()
 
