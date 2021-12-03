@@ -40,12 +40,12 @@ video = cv2.VideoCapture("/home/tyler/Desktop/SensorFusion/DetectionCode/Pedestr
 # window name and size
 
 
-
+previousStates = RingBuffer(5)
 centers = RingBuffer(10)
-flag = False
+flag = "Clear"
 cv2.namedWindow("video", cv2.WINDOW_AUTOSIZE)
 while video.isOpened():
-    flag = False
+    flag = "Clear"
     # Read video capture
     ret, frame = video.read()
 
@@ -62,14 +62,14 @@ while video.isOpened():
         newHeight = frame.shape[0] * (max_width/frame.shape[1])
         frame = cv2.resize(frame, (int(newWidth), int(newHeight)))
 
-    detected_roads = rd.detect_road(frame, False)
+
 
     detected_pedestrians = pd.detect_pedestrians(frame, False)
-
     if not len(detected_pedestrians):
         print("No Pedestrians Detected in Image.")
-
     else:
+        detected_roads = rd.detect_road(frame, False)
+
         # for (x0, y0, x1, y1) in detected_pedestrians:
         #     # Get the top half of an image
         #     imageCopy = frame.copy()
@@ -81,7 +81,7 @@ while video.isOpened():
         for (x0, y0, x1, y1) in detected_roads:
             for(px0,py0, px1, py1) in detected_pedestrians:
                 if ((px0 >= x0 and px0 <= x1) or (px1 >= x0 and px1 <= x1)) and ((py0 >= y0 and py0 <= y1) or (py1 >= y0 and py1 <= y1)):    # if X of pedestrian is within road rectangle, flag
-                    flag = True
+                    flag = "Danger"
                     continue
 
 
@@ -105,12 +105,18 @@ while video.isOpened():
 
             cv2.circle(frame, (int(x),int(y)), radius=3, color=(0, 255, 0), thickness=-1)
 
+    if flag != "Danger" and "Danger" in previousStates.get():
+        flag = "Warning"
+
+    previousStates.append(flag)
 
     overlay = frame.copy()
-    if flag:
+    if flag == "Danger":   #Danger
         cv2.rectangle(overlay, (0, 0), (999, 999), (0, 0, 255), -1)
-    else:
+    elif flag == "Clear":  #Clear
         cv2.rectangle(overlay, (0, 0), (999, 999), (0, 255, 0), -1)
+    elif flag == "Warning":#warning
+        cv2.rectangle(overlay, (0, 0), (999, 999), (255, 255, 0), -1)
 
     cv2.addWeighted(overlay, 0.3, frame, .9, 0, frame)
 
