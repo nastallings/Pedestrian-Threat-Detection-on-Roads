@@ -11,7 +11,7 @@ def extract_features(image, showImage):
     @:return image keypoints
     """
 
-    sift = cv2.xfeatures2d.SIFT_create()
+    sift = cv2.SIFT_create()
     kp1, temp = sift.detectAndCompute(image, None)
 
     if showImage:

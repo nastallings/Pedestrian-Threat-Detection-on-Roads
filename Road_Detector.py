@@ -65,7 +65,7 @@ def detect_road(image, showImage):
 
     if showImage:
         draw_rectangles(image, finalRectangle)
-    return finalRectangle
+    return [finalRectangle]
 
 
 def draw_rectangles(image, rectangle):
