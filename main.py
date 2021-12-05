@@ -36,7 +36,7 @@ class RingBuffer:
         return self.data
 
 # load video capture from file
-video = cv2.VideoCapture("/home/tyler/Desktop/SensorFusion/DetectionCode/Pedestrian-Threat-Detection-on-Roads/IMG_1564.mp4")
+video = cv2.VideoCapture("IMG_1564.mp4")
 # window name and size
 
 
